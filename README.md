@@ -1,6 +1,6 @@
 # OpenCode Agent System
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/your-org/opencode-agent-system)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/devanze/agentic-operating-system)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agents](https://img.shields.io/badge/agents-64-ff6b6b.svg)](#agent-ecosystem)
 [![Skills](https://img.shields.io/badge/skills-43-845ef7.svg)](#skill-packs)
@@ -104,8 +104,8 @@ The system uses a **dual-model routing** strategy — DeepSeek V4 Pro for heavy 
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/opencode-agent-system.git
-cd opencode-agent-system
+git clone https://github.com/devanze/agentic-operating-system.git
+cd agentic-operating-system
 
 # Install into your project's .opencode/ directory
 ./install.sh /path/to/your/project
@@ -709,7 +709,7 @@ Every agent call is recorded to `~/.opencode/metrics/agent-calls.jsonl`:
 ## Project Structure
 
 ```
-opencode-agent-system/
+agentic-operating-system/
 ├── AGENTS.md                   # Master agent instructions (orchestration rules)
 ├── opencode.json               # Main configuration (providers, models, agents)
 ├── tui.json                    # Terminal UI configuration (theme, keybinds)
