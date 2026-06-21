@@ -19,7 +19,7 @@
 
 OpenCode Agent System transforms OpenCode from a single-AI coding assistant into a **team of specialized AI agents** governed by strict orchestration rules, priority enforcement, and automated quality gates. Instead of one AI doing everything, a pure orchestrator delegates work to the right specialist: planners for architecture, tdd-guide for test-driven development, code-reviewer for quality, security-reviewer for vulnerability detection, and 58 more.
 
-The system uses a **dual-model routing** strategy — DeepSeek V4 Pro for heavy thinking (planning, architecture, review) and DeepSeek V4 Flash for light execution (formatting, exploration, simple edits) — balancing quality with cost efficiency across 15 provider models and 3 providers.
+The system uses a **dual-model routing** strategy — DeepSeek V4 Pro for heavy thinking (planning, architecture, review) and DeepSeek V4 Flash for light execution (formatting, exploration, simple edits) — balancing quality with cost efficiency across 6 SumoPod models.
 
 ### Architecture
 
@@ -596,7 +596,7 @@ The system integrates **16 MCP (Model Context Protocol) servers** providing exte
 
 ## Provider Models
 
-The system supports **15 models across 3 providers** with dual-model routing:
+The system supports **6 SumoPod models** with dual-model routing:
 
 ### SumoPod AI
 | Model | Name | Tier |
@@ -608,22 +608,6 @@ The system supports **15 models across 3 providers** with dual-model routing:
 | `gpt-5-nano` | GPT 5 Nano | Light |
 | `gpt-5-mini` | GPT 5 Mini | Light |
 
-### Devanze AI
-| Model | Name | Tier |
-|-------|------|------|
-| `ag/claude-opus-4-6-thinking` | Claude Opus 4.6 | Heavy |
-| `ag/claude-sonnet-4-6` | Claude Sonnet 4.6 | Medium |
-| `dev/gemini/gemini-2.5-flash` | Gemini 2.5 Flash | Light |
-| `ag/gemini-3-flash` | Gemini 3 Flash | Light |
-
-### Ollama (Local)
-| Model | Name | Tier |
-|-------|------|------|
-| `deepseek-r1` | DeepSeek R1 | Heavy |
-| `llama3.3` | Llama 3.3 | Medium |
-| `qwen2.5` | Qwen 2.5 | Medium |
-| `mistral` | Mistral | Light |
-| `nomic-embed-text` | Embedding | Utility |
 
 **Routing strategy:** Core agents (planner, architect, code-architect, tdd-guide, code-reviewer, security-reviewer) use **DeepSeek V4 Pro** for heavy reasoning. Execution agents and reviewers use **DeepSeek V4 Flash** for fast, cost-effective operation.
 
@@ -637,7 +621,7 @@ The instinct learning subsystem is a SQLite-backed knowledge graph that allows t
 
 1. **Auto-Capture** — Plugin hooks automatically record bash errors, session summaries, and key events to the knowledge graph.
 2. **Pattern Extraction** — The system analyzes session data to identify recurring patterns, effective solutions, and common mistakes.
-3. **Clustering** — Related learnings are clustered together using embedding similarity (via `nomic-embed-text`).
+3. **Clustering** — Related learnings are clustered together using embedding similarity.
 4. **Skill Evolution** — Clustered patterns can be promoted into reusable skills via `/skill-evolve`.
 
 ### Commands
