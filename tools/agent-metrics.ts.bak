@@ -1,0 +1,123 @@
+import { tool } from "@opencode-ai/plugin/tool"
+import { z } from "zod"
+import { readMetrics, writeMetrics } from "./metrics-writer"
+
+export const agentMetrics = tool({
+  name: "agent_metrics",
+  description: "Query agent call metrics dashboard — latency, token cost, error rates per agent.",
+  args: z.object({
+    operation: z.enum(["dashboard", "query", "trend", "prune"]).describe("Operation: dashboard summary, query filter, trend analysis, or prune old data"),
+    agentFilter: z.string().optional().describe("Agent name regex filter"),
+    limit: z.number().default(50).describe("Max entries to return"),
+    timeRange: z.object({
+      start: z.number().optional().describe("Start timestamp ms"),
+      end: z.number().optional().describe("End timestamp ms")
+    }).optional().describe("Time range filter")
+  }),
+  execute: async ({ operation, agentFilter, limit, timeRange }) => {
+    const safeOp = operation || "dashboard"
+    const safeLimit = limit || 50
+    const metrics = readMetrics()
+
+    if (metrics.length === 0) {
+      if (safeOp === "dashboard") {
+        return { summary: { total_calls: 0, total_agents: 0, overall_error_rate: "0.0%" }, table: "No agent call data yet." }
+      }
+      if (safeOp === "trend") {
+        return { table: "No trend data yet." }
+      }
+      return { count: 0, table: "No data." }
+    }
+    if (safeOp === "prune") {
+      const cutoff = new Date()
+      cutoff.setDate(cutoff.getDate() - 30)
+      const cutoffMs = cutoff.getTime()
+      const pruned = metrics.filter(m => new Date(m.timestamp).getTime() >= cutoffMs)
+      writeMetrics(pruned)
+      return {
+        pruned: metrics.length - pruned.length,
+        remaining: pruned.length,
+        message: `Pruned ${metrics.length - pruned.length} entries older than 30 days`
+      }
+    }
+    }
+
+    let filtered = metrics
+    const now = Date.now()
+    if (timeRange) {
+      filtered = filtered.filter(m => {
+        const ts = new Date(m.timestamp).getTime()
+        if (timeRange.start && ts < timeRange.start) return false
+        if (timeRange.end && ts > timeRange.end) return false
+        return true
+      })
+    }
+    if (agentFilter) {
+      const re = new RegExp(agentFilter, "i")
+      filtered = filtered.filter(m => re.test(m.agent_name))
+    }
+
+    if (safeOp === "dashboard") {
+      const byAgent: Record<string, { calls: number; latencies: number[]; errors: number; tokens: { input: number; output: number } }> = {}
+      for (const m of filtered) {
+        if (!byAgent[m.agent_name]) byAgent[m.agent_name] = { calls: 0, latencies: [], errors: 0, tokens: { input: 0, output: 0 } }
+        const a = byAgent[m.agent_name]
+        a.calls++
+        a.latencies.push(m.duration_ms)
+        a.tokens.input += m.token_usage.input
+        a.tokens.output += m.token_usage.output
+        if (!m.success) a.errors++
+      }
+      const rows = Object.entries(byAgent).map(([name, a]) => {
+        const sorted = a.latencies.sort((x, y) => x - y)
+        const p50 = sorted[Math.floor(sorted.length * 0.5)] || 0
+        const p95 = sorted[Math.floor(sorted.length * 0.95)] || 0
+        const p99 = sorted[Math.floor(sorted.length * 0.99)] || 0
+        const avg = Math.round(sorted.reduce((s, v) => s + v, 0) / sorted.length)
+        const errRate = ((a.errors / a.calls) * 100).toFixed(1)
+        const costEst = ((a.tokens.input + a.tokens.output) / 1_000_000 * 30).toFixed(4)
+        return `| ${name} | ${a.calls} | ${avg}ms | ${p50}ms | ${p95}ms | ${p99}ms | ${errRate}% | $${costEst} |`
+      })
+      return {
+        summary: {
+          total_calls: filtered.length,
+          total_agents: Object.keys(byAgent).length,
+          overall_error_rate: `${((filtered.filter(m => !m.success).length / Math.max(filtered.length, 1)) * 100).toFixed(1)}%`
+        },
+        table: `| Agent | Calls | Avg | P50 | P95 | P99 | Err% | EstCost |
+|-------|-------|-----|-----|-----|-----|------|---------|
+${rows.join("\n")}`
+      }
+    }
+
+    if (safeOp === "trend") {
+      const byDay: Record<string, { total: number; errors: number; totalLatency: number }> = {}
+      for (const m of filtered) {
+        const day = m.timestamp.split("T")[0]
+        if (!byDay[day]) byDay[day] = { total: 0, errors: 0, totalLatency: 0 }
+        byDay[day].total++
+        if (!m.success) byDay[day].errors++
+        byDay[day].totalLatency += m.duration_ms
+      }
+      const rows = Object.entries(byDay).sort().map(([day, d]) => {
+        const errRate = ((d.errors / d.total) * 100).toFixed(1)
+        const avgLat = Math.round(d.totalLatency / d.total)
+        return `| ${day} | ${d.total} | ${avgLat}ms | ${errRate}% |`
+      })
+      return {
+        table: `| Day | Calls | Avg Lat | Err% |
+|-----|-------|---------|------|
+${rows.join("\n")}`
+      }
+    }
+
+    const recent = filtered.slice(-safeLimit)
+    const rows = recent.map(m => `| ${m.timestamp} | ${m.agent_name} | ${m.tool} | ${m.duration_ms}ms | ${m.success ? "✅" : "❌"} |`)
+    return {
+      count: recent.length,
+      table: `| Time | Agent | Tool | Duration | Status |
+|------|-------|------|----------|--------|
+${rows.join("\n")}`
+    }
+  }
+})

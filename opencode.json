@@ -1,0 +1,1630 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": [
+    "opencode-gemini-auth@latest",
+    "opencode-antigravity-auth@latest"
+   ],
+  "provider": {
+    "sumopod": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "SumoPod AI",
+      "options": {
+        "baseURL": "https://ai.sumopod.com/v1"
+      },
+      "models": {
+        "deepseek-v4-pro": {
+          "name": "DeepSeek V4 Pro"
+        },
+        "deepseek-v4-flash": {
+          "name": "DeepSeek V4 Flash"
+        },
+        "kimi-k2.6": {
+          "name": "Kimi K2.6"
+        },
+        "claude-sonnet-4-6": {
+          "name": "Claude Sonet 4.6"
+        },
+        "gpt-5-nano": {
+          "name": "GPT 5 Nano"
+        },
+        "gpt-5-mini": {
+          "name": "GPT 5 Mini"
+        }
+      }
+    }
+  },
+  "model": "sumopod/deepseek-v4-pro",
+  "small_model": "sumopod/deepseek-v4-flash",
+  "default_agent": "orchestrator",
+  "instructions": [
+    "AGENTS.md",
+    "instructions/INSTRUCTIONS.md",
+    "skills/coding-standards/SKILL.md",
+    "skills/security-patterns/SKILL.md",
+    "skills/backend-patterns/SKILL.md",
+    "skills/frontend-patterns/SKILL.md",
+    "skills/api-design/SKILL.md",
+    "skills/database-patterns/SKILL.md",
+    "skills/deployment-patterns/SKILL.md",
+    "skills/error-handling/SKILL.md",
+    "skills/testing-patterns/SKILL.md",
+    "skills/git-workflow/SKILL.md",
+    "skills/docker-patterns/SKILL.md",
+    "skills/prompt-engineering/SKILL.md",
+    "skills/rust-patterns/SKILL.md",
+    "skills/kotlin-patterns/SKILL.md",
+    "skills/cpp-coding-standards/SKILL.md",
+    "skills/csharp-testing/SKILL.md",
+    "skills/swiftui-patterns/SKILL.md",
+    "skills/dart-flutter-patterns/SKILL.md",
+    "skills/react-performance/SKILL.md",
+    "skills/nextjs-turbopack/SKILL.md",
+    "skills/nestjs-patterns/SKILL.md",
+    "skills/django-patterns/SKILL.md",
+    "skills/fastapi-patterns/SKILL.md",
+    "skills/springboot-patterns/SKILL.md",
+    "skills/quarkus-patterns/SKILL.md",
+    "skills/prisma-patterns/SKILL.md",
+    "skills/redis-patterns/SKILL.md",
+    "skills/kubernetes-patterns/SKILL.md",
+    "skills/mcp-server-patterns/SKILL.md",
+    "skills/agent-harness-construction/SKILL.md",
+    "skills/autonomous-loops/SKILL.md",
+    "skills/team-agent-orchestration/SKILL.md",
+    "skills/continuous-learning/SKILL.md",
+    "skills/cost-tracking/SKILL.md",
+    "skills/production-audit/SKILL.md",
+    "skills/strategic-compact/SKILL.md",
+    "skills/search-first/SKILL.md",
+    "skills/verification-loop/SKILL.md",
+    "skills/design-system/SKILL.md",
+    "skills/accessibility/SKILL.md",
+    "skills/hexagonal-architecture/SKILL.md",
+    "rules/common/coding-style.md",
+    "rules/common/security.md",
+    "rules/common/testing.md",
+    "rules/common/git-workflow.md",
+    "skills/observability-pipeline/SKILL.md",
+    "skills/agent-fallback/SKILL.md"
+  ],
+  "plugin": [
+    "./plugins"
+  ],
+  "skills": {
+    "paths": [
+      ".skills"
+    ]
+  },
+  "agent": {
+    "build": {
+      "disable": true
+    },
+    "plan": {
+      "disable": true
+    },
+    "apapun":{
+      "description": "Bug bounty spesialist",
+      "temperature": 0.1
+    },
+    "orchestrator": {
+      "description": "Primary orchestrator agent — delegates to specialist subagents",
+      "mode": "primary",
+      "model": "sumopod/deepseek-v4-pro",
+      "temperature": 0.1,
+      "system": [
+        "You are a PURE ORCHESTRATOR. Your tools: read, glob, grep, list, websearch, webfetch, and Task.",
+        "You CANNOT write or edit code (edit:deny, write:deny). Bash is NOT available — delegate all shell commands to bash-specialist.",
+        "For ANY shell command execution, delegate to bash-specialist subagent.",
+        "For ANY user request, your ONLY action is: call the Task tool with the right subagent. Period.",
+        "Your workflow for every task: Task(subagent) → wait → Task(reviewer). Never skip review.",
+        "",
+        "AVAILABLE SUBAGENTS (use EXACT name in subagent_type):",
+        "  planner — implementation planning",
+        "  architect — system design",
+        "  bash-specialist — execute bash/powershell commands safely (bash execution only, no code changes)",
+        "  code-architect — feature architecture from codebase patterns",
+        "  tdd-guide — TDD: write tests, implement, refactor (CAN write code)",
+        "  code-reviewer — code quality review (read-only)",
+        "  security-reviewer — vulnerability audit (read-only)",
+        "  build-error-resolver — fix build/type errors",
+        "  django-build-resolver — fix Django errors",
+        "  code-explorer — explore codebase architecture",
+        "  database-reviewer — schema/query review",
+        "  performance-optimizer — find bottlenecks",
+        "  uiux-designer — UI/UX design",
+        "  ui-reviewer — Visual UI review with Playwright screenshots + vision AI",
+        "  seo-specialist — SEO audit",
+        "  doc-updater — update documentation",
+        "  refactor-cleaner — cleanup dead code",
+        "  e2e-runner — end-to-end tests",
+        "  loop-operator — autonomous loops",
+        "  general — LAST RESORT fallback executor (use ONLY when no specialist available)",
+        "  chief-of-staff — communication triage",
+        "  typescript-reviewer, python-reviewer, go-reviewer, rust-reviewer, kotlin-reviewer",
+        "  cpp-reviewer, csharp-reviewer, flutter-reviewer, react-reviewer, swift-reviewer",
+        "  php-reviewer, ruby-reviewer, django-reviewer, fastapi-reviewer, springboot-reviewer",
+        "  laravel-reviewer, nestjs-reviewer, nextjs-reviewer, codeigniter-reviewer, angular-reviewer",
+        "  dart-reviewer, java-reviewer, perl-reviewer, harness-optimizer",
+        "  rust-build-resolver, kotlin-build-resolver, cpp-build-resolver, dart-build-resolver",
+        "  swift-build-resolver, react-build-resolver, php-build-resolver, go-build-resolver, java-build-resolver",
+        "  performance-optimizer, silent-failure-hunter, code-simplifier",
+        "  docs-lookup, healthcare-reviewer, network-architect, mle-reviewer",
+        "  observability-reviewer — agent metrics, latency analysis, cost optimization",
+        "  comment-analyzer, type-design-analyzer, conversation-analyzer, pr-test-analyzer",
+        "",
+        "DELEGATION RULES — SPECIALIST-FIRST (ALWAYS follow):",
+        "  Task-to-Agent Mapping (pick THE specialist, not tdd-guide for everything):",
+        "    Write/implement code for features/bugfixes → tdd-guide",
+        "    Write/implement UI components/styling → uiux-designer",
+        "    Fix build/compile/type errors → build-error-resolver (or django-build-resolver for Django)",
+        "    Database schema, query, migration → database-reviewer",
+        "    Performance profiling & optimization → performance-optimizer",
+        "    Create/update documentation → doc-updater",
+        "    Remove dead code, consolidate duplicates → refactor-cleaner",
+        "    Write/run E2E tests → e2e-runner",
+        "    SEO audit → seo-specialist",
+        "    Security audit → security-reviewer",
+        "  Pre-code Planning (BEFORE any executor runs):",
+        "    Complex (3+ files, new feature) → planner produces PLAN.md → then dispatch correct executor",
+        "    Greenfield (empty folder) → architect produces ARCHITECTURE.md → then dispatch correct executor",
+        "    Feature architecture from codebase → code-architect produces BLUEPRINT.md → then dispatch correct executor",
+        "    UI/UX design → uiux-designer produces DESIGN.md → then it also implements OR handoff to tdd-guide",
+        "  Plan-to-Executor Handoff (MANDATORY — after planner/architect/code-architect completes):",
+        "    Read the produced .md file to identify the domain",
+        "    Dispatch to the CORRECT specialist executor based on domain:",
+        "      Backend/API/Logic code → tdd-guide",
+        "      Frontend/UI/CSS → uiux-designer",
+        "      Database → database-reviewer (review only) then tdd-guide for code",
+        "      Performance fixes → performance-optimizer",
+        "      Docs → doc-updater",
+        "      E2E → e2e-runner",
+        "      Refactoring → refactor-cleaner",
+        "    NEVER default to general agent — it is LAST RESORT only",
+        "  Review (AFTER every executor):",
+        "    Executor completes → code-reviewer (MANDATORY, always)",
+        "    Auth/secrets/input changes → code-reviewer → security-reviewer (both mandatory)",
+        "    DB changes → code-reviewer → database-reviewer",
+        "  GENERAL AGENT RULES:",
+        "    general agent is STRICTLY last-resort fallback — use ONLY when:",
+        "      (a) No specialist agent exists for the task domain, OR",
+        "      (b) All specialist agents have failed and escalation chain brought you here",
+        "    Before dispatching to general: log why no specialist could handle this",
+        "    After general completes: ALWAYS follow with code-reviewer",
+        "  Agent failure → fallback escalation chain → retry → halt (max 3 attempts)",
+        "",
+        "FILE-BASED HANDOFF PROTOCOL (MANDATORY):",
+        "  Analysis agents MUST write output as .md files:",
+        "    planner -> PLAN.md | architect -> ARCHITECTURE.md | code-architect -> BLUEPRINT.md",
+        "    uiux-designer -> DESIGN.md | database-reviewer -> DB_REVIEW.md",
+        "    performance-optimizer -> PERF_REPORT.md | security-reviewer -> SECURITY_AUDIT.md",
+        "  When handing off to ANY write-capable agent (tdd-guide, uiux-designer,",
+        "    refactor-cleaner, doc-updater, e2e-runner, performance-optimizer, build-error-resolver):",
+        "  (general agent is LAST RESORT only — do NOT list it as a primary executor)",
+        "    Step 1 is ALWAYS: Read the relevant .md file(s) FIRST before ANY code.",
+        "  Execution agents: be faithful to the plan. Don't deviate unless you flag it first.",
+        "  Any agent may create additional .md files to improve consistency for downstream agents.",
+        "  This keeps plans explicit, visible, never lost in conversation buffer.",
+        "  **PROGRESS.md is created by planner or architect (NOT by execution agents).** Execution agents (tdd-guide) update PROGRESS.md inline during execution. Doc-updater updates PROGRESS.md when a task/phase completes.",
+        "    Orchestrator MUST check PROGRESS.md before dispatching code-reviewer",
+        "",
+        "REVIEW is MANDATORY after EVERY code change. Always run code-reviewer after executor finishes.",
+        "For auth/secrets/input changes, ALWAYS add security-reviewer after the main review.",
+        "Before dispatching code-reviewer, verify PROGRESS.md exists and all steps are resolved (Done or Blocked).",
+        "You are the conductor. You NEVER play any instrument."
+      ],
+      "tools": {
+        "read": true,
+        "glob": true,
+        "grep": true,
+        "list": true,
+        "edit": false,
+        "write": false,
+        "bash": false,
+        "websearch": true,
+        "webfetch": true,
+        "task": true
+      },
+      "permission": {
+        "edit": "deny",
+        "write": "deny",
+        "filesystem_edit_file": "deny",
+	"token-optimizer_smart_write": "deny",
+        "filesystem_write_file": "deny"
+      }
+    },
+    "planner": {
+      "description": "Expert planning specialist for complex features, refactoring, and architectural changes. Read-only — plans only, no code changes.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-pro",
+      "temperature": 0.1,
+      "prompt": "{file:agents/planner.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": true
+      }
+    },
+    "architect": {
+      "description": "Software architecture specialist for system design, scalability, and technical decisions.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-pro",
+      "temperature": 0.1,
+      "prompt": "{file:agents/architect.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": true
+      }
+    },
+    "tdd-guide": {
+      "description": "Test-Driven Development specialist enforcing write-tests-first methodology with 80%+ coverage.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-pro",
+      "temperature": 0.1,
+      "prompt": "{file:agents/tdd-guide.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "code-reviewer": {
+      "description": "Expert code review specialist for quality, correctness, and maintainability.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-pro",
+      "temperature": 0.05,
+      "prompt": "{file:agents/code-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "security-reviewer": {
+      "description": "Security vulnerability detection and remediation specialist.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-pro",
+      "temperature": 0.05,
+      "prompt": "{file:agents/security-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "build-error-resolver": {
+      "description": "Build, compilation, and type error resolution specialist.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-pro",
+      "temperature": 0.05,
+      "prompt": "{file:agents/build-error-resolver.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "django-build-resolver": {
+      "description": "Fixes Django build, migration, import, and config errors with minimal surgical changes.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-pro",
+      "temperature": 0.1,
+      "prompt": "{file:agents/django-build-resolver.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "e2e-runner": {
+      "description": "End-to-end testing specialist for critical user flows.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/e2e-runner.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "refactor-cleaner": {
+      "description": "Dead code cleanup and consolidation specialist.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/refactor-cleaner.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "doc-updater": {
+      "description": "Documentation and codebase mapping specialist.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.15,
+      "prompt": "{file:agents/doc-updater.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": false
+      }
+    },
+    "typescript-reviewer": {
+      "description": "Expert TypeScript/JavaScript code reviewer for type safety and modern patterns.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/typescript-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "python-reviewer": {
+      "description": "Expert Python code reviewer for PEP 8, Pythonic patterns, and type safety.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/python-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "go-reviewer": {
+      "description": "Expert Go code reviewer for idiomatic Go, concurrency, and error handling.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/go-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "go-build-resolver": {
+      "description": "Go build, vet, and compilation error resolution specialist.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.05,
+      "prompt": "{file:agents/go-build-resolver.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "database-reviewer": {
+      "description": "Database specialist for query optimization, schema design, and migration safety.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.05,
+      "prompt": "{file:agents/database-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "code-explorer": {
+      "description": "Fast codebase exploration specialist for architecture mapping.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.15,
+      "prompt": "{file:agents/code-explorer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "loop-operator": {
+      "description": "Autonomous loop operator for safe long-running agent tasks.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/loop-operator.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": true,
+        "write": true
+      }
+    },
+    "rust-reviewer": {
+      "description": "Expert Rust code reviewer for ownership, lifetimes, concurrency, and performance.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/rust-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "kotlin-reviewer": {
+      "description": "Expert Kotlin code reviewer for coroutines, flows, and Android/KMP patterns.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/kotlin-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "cpp-reviewer": {
+      "description": "Expert C++ code reviewer for memory safety, RAII, and modern C++ idioms.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/cpp-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "csharp-reviewer": {
+      "description": "Expert C# code reviewer for .NET patterns, LINQ, and async/await safety.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/csharp-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "dart-reviewer": {
+      "description": "Expert Dart code reviewer for null safety, async patterns, and Flutter conventions.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/dart-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "flutter-reviewer": {
+      "description": "Expert Flutter code reviewer for widget composition, state management, and navigation.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/flutter-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "react-reviewer": {
+      "description": "Expert React code reviewer for hooks, state management, component design, and performance.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/react-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "nextjs-reviewer": {
+      "description": "Expert Next.js code reviewer for App Router, Server Components, RSC, streaming, ISR, and Edge.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/nextjs-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "angular-reviewer": {
+      "description": "Expert Angular code reviewer for RxJS, DI, and component architecture.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/angular-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "swift-reviewer": {
+      "description": "Expert Swift code reviewer for Swift 6 concurrency, SwiftUI, and protocol patterns.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/swift-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "php-reviewer": {
+      "description": "Expert PHP code reviewer for PSR-12, PHP 8.x, security, and Laravel patterns.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/php-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "ruby-reviewer": {
+      "description": "Expert Ruby code reviewer for idiomatic Ruby, Rails patterns, and readability.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/ruby-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "perl-reviewer": {
+      "description": "Expert Perl code reviewer for modern Perl, safety, and module patterns.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/perl-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "rust-build-resolver": {
+      "description": "Rust build, Cargo, and compilation error resolution specialist.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.05,
+      "prompt": "{file:agents/rust-build-resolver.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "kotlin-build-resolver": {
+      "description": "Kotlin/Gradle build, compilation, and dependency error resolution specialist.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.05,
+      "prompt": "{file:agents/kotlin-build-resolver.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "cpp-build-resolver": {
+      "description": "C++ build, CMake, and linker error resolution specialist.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.05,
+      "prompt": "{file:agents/cpp-build-resolver.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "dart-build-resolver": {
+      "description": "Dart build, pub, and compilation error resolution specialist.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.05,
+      "prompt": "{file:agents/dart-build-resolver.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "swift-build-resolver": {
+      "description": "Swift build, Xcode, and SPM compilation error resolution specialist.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.05,
+      "prompt": "{file:agents/swift-build-resolver.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "react-build-resolver": {
+      "description": "React/Next.js build, bundler, and JSX compilation error resolution specialist.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.05,
+      "prompt": "{file:agents/react-build-resolver.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "php-build-resolver": {
+      "description": "PHP build, Composer, and compilation error resolution specialist.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.05,
+      "prompt": "{file:agents/php-build-resolver.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "java-build-resolver": {
+      "description": "Java/Maven/Gradle build, compilation, and dependency error resolution specialist.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.05,
+      "prompt": "{file:agents/java-build-resolver.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "django-reviewer": {
+      "description": "Expert Django code reviewer for ORM, views, models, migration safety, and DRF.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/django-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "fastapi-reviewer": {
+      "description": "Expert FastAPI code reviewer for Pydantic, DI, async patterns, and API design.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/fastapi-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "springboot-reviewer": {
+      "description": "Expert Spring Boot code reviewer for JPA, layered architecture, security, and conventions.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/springboot-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "java-reviewer": {
+      "description": "Expert Java code reviewer for OOP, streams, concurrency, and JVM best practices.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/java-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "laravel-reviewer": {
+      "description": "Expert Laravel code reviewer for Eloquent, Blade, queues, security, and conventions.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/laravel-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "nestjs-reviewer": {
+      "description": "Expert NestJS code reviewer for modules, decorators, DI, guards, and TypeScript.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/nestjs-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "codeigniter-reviewer": {
+      "description": "Expert CodeIgniter 4 code reviewer for MVC, query builder, validation, routes, and security.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/codeigniter-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "uiux-designer": {
+      "description": "Expert UI/UX designer for design systems, Figma conversion, usability, animations, and accessible interfaces.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-pro",
+      "temperature": 0.1,
+      "prompt": "{file:agents/uiux-designer.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "chief-of-staff": {
+      "description": "Personal chief of staff for triaging email, Slack, LINE, Messenger — 4-tier classification, draft replies, post-send follow-through.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/chief-of-staff.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "code-architect": {
+      "description": "Designs feature architectures from existing codebase patterns — implementation blueprints with files, interfaces, data flow, and build order.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/code-architect.md}",
+      "tools": {
+        "read": true,
+        "bash": false,
+        "edit": false,
+        "write": true
+      }
+    },
+    "seo-specialist": {
+      "description": "SEO specialist for technical audits, on-page optimization, structured data, CWV, and keyword mapping.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/seo-specialist.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "performance-optimizer": {
+      "description": "Performance optimization specialist for code, queries, and infrastructure bottlenecks.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-pro",
+      "temperature": 0.1,
+      "prompt": "{file:agents/performance-optimizer.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "harness-optimizer": {
+      "description": "Harness configuration optimizer for AI coding assistant reliability and cost.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/harness-optimizer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": true
+      }
+    },
+    "healthcare-reviewer": {
+      "description": "Healthcare application reviewer for HIPAA, PHI, HL7/FHIR, and clinical safety.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.05,
+      "prompt": "{file:agents/healthcare-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "network-architect": {
+      "description": "Network architecture specialist for topology, security, routing, and infrastructure.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/network-architect.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "mle-reviewer": {
+      "description": "ML Engineering reviewer for production ML pipelines, deployment, and MLOps.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/mle-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "silent-failure-hunter": {
+      "description": "Finds bugs that produce no errors but cause wrong behavior.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-pro",
+      "temperature": 0.1,
+      "prompt": "{file:agents/silent-failure-hunter.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "comment-analyzer": {
+      "description": "Code comment quality analyzer for usefulness and accuracy.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/comment-analyzer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "type-design-analyzer": {
+      "description": "Type system and data model design analyst for correctness and expressiveness.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/type-design-analyzer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "conversation-analyzer": {
+      "description": "Conversation history analyzer for patterns, missed opportunities, and improvements.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.15,
+      "prompt": "{file:agents/conversation-analyzer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "pr-test-analyzer": {
+      "description": "PR test impact analyzer determining required tests based on changed files and risk.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/pr-test-analyzer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "code-simplifier": {
+      "description": "Code simplification specialist reducing complexity without changing behavior.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-pro",
+      "temperature": 0.1,
+      "prompt": "{file:agents/code-simplifier.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "docs-lookup": {
+      "description": "Documentation lookup specialist using Context7 MCP for current library/API docs with code examples.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/docs-lookup.md}",
+      "tools": {
+        "read": true,
+        "bash": false,
+        "edit": false,
+        "write": false
+      }
+    },
+    "observability-reviewer": {
+      "description": "Observability pipeline reviewer for agent metrics, latency analysis, and cost optimization.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.05,
+      "prompt": "{file:agents/observability-reviewer.md}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "edit": false,
+        "write": false
+      }
+    },
+    "general": {
+      "description": "LAST-RESORT fallback agent — use ONLY when no specialist agent exists for the task.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-pro",
+      "temperature": 0.1,
+      "prompt": "{file:agents/general.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "ui-reviewer": {
+      "description": "UI visual review specialist using Playwright browser capture and GPT-5 Mini vision model. Captures screenshots at multiple viewports, analyzes visual output, and cross-references with source code for layout, accessibility, and responsiveness issues.",
+      "mode": "subagent",
+      "model": "sumopod/gpt-5-mini",
+      "temperature": 0.1,
+      "prompt": "{file:agents/ui-reviewer.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": false,
+        "bash": false
+      }
+    },
+    "bash-specialist": {
+      "description": "Specialized bash/powershell command executor. Executes shell commands safely and returns results. Used by orchestrator when any bash execution is needed — prevents orchestrator from injecting shell commands.",
+      "mode": "subagent",
+      "model": "sumopod/deepseek-v4-flash",
+      "temperature": 0.1,
+      "prompt": "{file:agents/bash-specialist.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": false,
+        "bash": true
+      }
+    }
+  },
+  "command": {
+    "plan": {
+      "description": "Create a detailed implementation plan for complex features",
+      "template": "{file:commands/plan.md}\n\n$ARGUMENTS",
+      "agent": "planner",
+      "subtask": true
+    },
+    "architect": {
+      "description": "Architecture review and system design guidance",
+      "template": "{file:commands/architect.md}\n\n$ARGUMENTS",
+      "agent": "architect",
+      "subtask": true
+    },
+    "td": {
+      "description": "Enforce TDD workflow — write test first, implement, refactor",
+      "template": "{file:commands/td.md}\n\n$ARGUMENTS",
+      "agent": "tdd-guide",
+      "subtask": true
+    },
+    "review": {
+      "description": "Review code for quality, correctness, and maintainability",
+      "template": "{file:commands/review.md}\n\n$ARGUMENTS",
+      "agent": "code-reviewer",
+      "subtask": true
+    },
+    "security": {
+      "description": "Run comprehensive security vulnerability scan",
+      "template": "{file:commands/security.md}\n\n$ARGUMENTS",
+      "agent": "security-reviewer",
+      "subtask": true
+    },
+    "build": {
+      "description": "Fix build, compilation, and type errors with minimal changes",
+      "template": "{file:commands/build.md}\n\n$ARGUMENTS",
+      "agent": "build-error-resolver",
+      "subtask": true
+    },
+    "e2e": {
+      "description": "Generate and run end-to-end tests for critical flows",
+      "template": "{file:commands/e2e.md}\n\n$ARGUMENTS",
+      "agent": "e2e-runner",
+      "subtask": true
+    },
+    "refactor": {
+      "description": "Remove dead code, consolidate duplicates, and improve structure",
+      "template": "{file:commands/refactor.md}\n\n$ARGUMENTS",
+      "agent": "refactor-cleaner",
+      "subtask": true
+    },
+    "docs": {
+      "description": "Update documentation, codemaps, and API references",
+      "template": "{file:commands/docs.md}\n\n$ARGUMENTS",
+      "agent": "doc-updater",
+      "subtask": true
+    },
+    "explore": {
+      "description": "Explore and map codebase architecture and patterns",
+      "template": "{file:commands/explore.md}\n\n$ARGUMENTS",
+      "agent": "code-explorer",
+      "subtask": true
+    },
+    "ts-review": {
+      "description": "TypeScript/JavaScript specific code review",
+      "template": "{file:commands/ts-review.md}\n\n$ARGUMENTS",
+      "agent": "typescript-reviewer",
+      "subtask": true
+    },
+    "py-review": {
+      "description": "Python specific code review",
+      "template": "{file:commands/py-review.md}\n\n$ARGUMENTS",
+      "agent": "python-reviewer",
+      "subtask": true
+    },
+    "go-review": {
+      "description": "Go specific code review",
+      "template": "{file:commands/go-review.md}\n\n$ARGUMENTS",
+      "agent": "go-reviewer",
+      "subtask": true
+    },
+    "go-build": {
+      "description": "Fix Go build, vet, and compilation errors",
+      "template": "{file:commands/go-build.md}\n\n$ARGUMENTS",
+      "agent": "go-build-resolver",
+      "subtask": true
+    },
+    "db-review": {
+      "description": "Database schema, query, and migration review",
+      "template": "{file:commands/db-review.md}\n\n$ARGUMENTS",
+      "agent": "database-reviewer",
+      "subtask": true
+    },
+    "loop": {
+      "description": "Start and monitor autonomous agent loop",
+      "template": "{file:commands/loop.md}\n\n$ARGUMENTS",
+      "agent": "loop-operator",
+      "subtask": true
+    },
+    "checkpoint": {
+      "description": "Save current progress and verification state",
+      "template": "{file:commands/checkpoint.md}\n\n$ARGUMENTS"
+    },
+    "coverage": {
+      "description": "Analyze test coverage and identify gaps",
+      "template": "{file:commands/coverage.md}\n\n$ARGUMENTS"
+    },
+    "quality": {
+      "description": "Run quality gate — linting, formatting, and type checks",
+      "template": "{file:commands/quality.md}\n\n$ARGUMENTS"
+    },
+    "convention": {
+      "description": "Check code against coding standards and best practices",
+      "template": "{file:commands/convention.md}\n\n$ARGUMENTS"
+    },
+    "learn": {
+      "description": "Extract patterns and knowledge from current session",
+      "template": "{file:commands/learn.md}\n\n$ARGUMENTS"
+    },
+    "project-init": {
+      "description": "Initialize new project with recommended structure",
+      "template": "{file:commands/project-init.md}\n\n$ARGUMENTS"
+    },
+    "setup": {
+      "description": "Configure project tooling and dependencies",
+      "template": "{file:commands/setup.md}\n\n$ARGUMENTS"
+    },
+    "rust-review": {
+      "description": "Rust specific code review",
+      "template": "{file:commands/rust-review.md}\n\n$ARGUMENTS",
+      "agent": "rust-reviewer",
+      "subtask": true
+    },
+    "kotlin-review": {
+      "description": "Kotlin specific code review",
+      "template": "{file:commands/kotlin-review.md}\n\n$ARGUMENTS",
+      "agent": "kotlin-reviewer",
+      "subtask": true
+    },
+    "cpp-review": {
+      "description": "C++ specific code review",
+      "template": "{file:commands/cpp-review.md}\n\n$ARGUMENTS",
+      "agent": "cpp-reviewer",
+      "subtask": true
+    },
+    "csharp-review": {
+      "description": "C# specific code review",
+      "template": "{file:commands/csharp-review.md}\n\n$ARGUMENTS",
+      "agent": "csharp-reviewer",
+      "subtask": true
+    },
+    "flutter-review": {
+      "description": "Dart/Flutter specific code review",
+      "template": "{file:commands/flutter-review.md}\n\n$ARGUMENTS",
+      "agent": "flutter-reviewer",
+      "subtask": true
+    },
+    "react-review": {
+      "description": "React/Next.js specific code review",
+      "template": "{file:commands/react-review.md}\n\n$ARGUMENTS",
+      "agent": "react-reviewer",
+      "subtask": true
+    },
+    "nextjs-review": {
+      "description": "Next.js specific code review (App Router, RSC, ISR, Edge)",
+      "template": "{file:commands/nextjs-review.md}\n\n$ARGUMENTS",
+      "agent": "nextjs-reviewer",
+      "subtask": true
+    },
+    "code-architect": {
+      "description": "Design feature architecture from existing codebase patterns",
+      "template": "{file:commands/code-architect.md}\n\n$ARGUMENTS",
+      "agent": "code-architect",
+      "subtask": true
+    },
+    "chief": {
+      "description": "Triage all communication channels and generate draft replies",
+      "template": "{file:commands/chief.md}\n\n$ARGUMENTS",
+      "agent": "chief-of-staff",
+      "subtask": true
+    },
+    "swift-review": {
+      "description": "Swift specific code review",
+      "template": "{file:commands/swift-review.md}\n\n$ARGUMENTS",
+      "agent": "swift-reviewer",
+      "subtask": true
+    },
+    "php-review": {
+      "description": "PHP specific code review",
+      "template": "{file:commands/php-review.md}\n\n$ARGUMENTS",
+      "agent": "php-reviewer",
+      "subtask": true
+    },
+    "rust-build": {
+      "description": "Fix Rust build and compilation errors",
+      "template": "{file:commands/rust-build.md}\n\n$ARGUMENTS",
+      "agent": "rust-build-resolver",
+      "subtask": true
+    },
+    "kotlin-build": {
+      "description": "Fix Kotlin/Gradle build errors",
+      "template": "{file:commands/kotlin-build.md}\n\n$ARGUMENTS",
+      "agent": "kotlin-build-resolver",
+      "subtask": true
+    },
+    "cpp-build": {
+      "description": "Fix C++ build and compilation errors",
+      "template": "{file:commands/cpp-build.md}\n\n$ARGUMENTS",
+      "agent": "cpp-build-resolver",
+      "subtask": true
+    },
+    "django-review": {
+      "description": "Django specific code review",
+      "template": "{file:commands/django-review.md}\n\n$ARGUMENTS",
+      "agent": "django-reviewer",
+      "subtask": true
+    },
+    "django-build": {
+      "description": "Fix Django build, migration, import, and config errors",
+      "template": "{file:commands/django-build.md}\n\n$ARGUMENTS",
+      "agent": "django-build-resolver",
+      "subtask": true
+    },
+    "fastapi-review": {
+      "description": "FastAPI specific code review",
+      "template": "{file:commands/fastapi-review.md}\n\n$ARGUMENTS",
+      "agent": "fastapi-reviewer",
+      "subtask": true
+    },
+    "spring-review": {
+      "description": "Spring Boot specific code review",
+      "template": "{file:commands/spring-review.md}\n\n$ARGUMENTS",
+      "agent": "springboot-reviewer",
+      "subtask": true
+    },
+    "laravel-review": {
+      "description": "Laravel specific code review",
+      "template": "{file:commands/laravel-review.md}\n\n$ARGUMENTS",
+      "agent": "laravel-reviewer",
+      "subtask": true
+    },
+    "nestjs-review": {
+      "description": "NestJS specific code review",
+      "template": "{file:commands/nestjs-review.md}\n\n$ARGUMENTS",
+      "agent": "nestjs-reviewer",
+      "subtask": true
+    },
+    "codeigniter-review": {
+      "description": "CodeIgniter 4 specific code review (MVC, query builder, routes, validation)",
+      "template": "{file:commands/codeigniter-review.md}\n\n$ARGUMENTS",
+      "agent": "codeigniter-reviewer",
+      "subtask": true
+    },
+    "ux": {
+      "description": "UI/UX design specialist (visuals, interaction, accessibility)",
+      "template": "{file:commands/ux.md}\n\n$ARGUMENTS",
+      "agent": "uiux-designer",
+      "subtask": true
+    },
+    "seo": {
+      "description": "SEO audit and optimization",
+      "template": "{file:commands/seo.md}\n\n$ARGUMENTS",
+      "agent": "seo-specialist",
+      "subtask": true
+    },
+    "perf": {
+      "description": "Identify and fix performance bottlenecks",
+      "template": "{file:commands/perf.md}\n\n$ARGUMENTS",
+      "agent": "performance-optimizer",
+      "subtask": true
+    },
+    "orchestrate": {
+      "description": "Orchestrate multiple agents for complex multi-step tasks",
+      "template": "{file:commands/orchestrate.md}\n\n$ARGUMENTS",
+      "agent": "planner",
+      "subtask": true
+    },
+    "multi": {
+      "description": "Multi-agent parallel execution for independent subtasks",
+      "template": "{file:commands/multi.md}\n\n$ARGUMENTS"
+    },
+    "resume": {
+      "description": "Resume from last checkpoint or saved session",
+      "template": "{file:commands/resume.md}\n\n$ARGUMENTS"
+    },
+    "save": {
+      "description": "Save current session state as a checkpoint",
+      "template": "{file:commands/save.md}\n\n$ARGUMENTS"
+    },
+    "sessions": {
+      "description": "List and manage saved sessions",
+      "template": "{file:commands/sessions.md}\n\n$ARGUMENTS"
+    },
+    "prune": {
+      "description": "Clean up stale context, files, and cruft",
+      "template": "{file:commands/prune.md}\n\n$ARGUMENTS"
+    },
+    "harness": {
+      "description": "Audit agent harness configuration",
+      "template": "{file:commands/harness.md}\n\n$ARGUMENTS",
+      "agent": "harness-optimizer",
+      "subtask": true
+    },
+    "hookify": {
+      "description": "Configure hook profiles for current session",
+      "template": "{file:commands/hookify.md}\n\n$ARGUMENTS"
+    },
+    "web-search": {
+      "description": "Search the web for documentation and reference",
+      "template": "{file:commands/web-search.md}\n\n$ARGUMENTS"
+    },
+    "docs-lookup": {
+      "description": "Look up library documentation in real-time",
+      "template": "{file:commands/docs-lookup.md}\n\n$ARGUMENTS"
+    },
+    "git-status": {
+      "description": "Show git status, branches, and file changes",
+      "template": "{file:commands/git-status.md}\n\n$ARGUMENTS"
+    },
+    "e2e-test": {
+      "description": "Run automated browser tests with Playwright",
+      "template": "{file:commands/e2e-test.md}\n\n$ARGUMENTS",
+      "agent": "e2e-runner",
+      "subtask": true
+    },
+    "skill-create": {
+      "description": "Generate new skill pack from observed patterns",
+      "template": "{file:commands/skill-create.md}\n\n$ARGUMENTS"
+    },
+    "verify": {
+      "description": "Run verification loop — tests, types, lint, format, coverage",
+      "template": "{file:commands/verify.md}\n\n$ARGUMENTS"
+    },
+    "update-codemaps": {
+      "description": "Update codebase codemaps and architecture documentation",
+      "template": "{file:commands/update-codemaps.md}\n\n$ARGUMENTS",
+      "agent": "doc-updater",
+      "subtask": true
+    },
+    "instinct-status": {
+      "description": "View learned instincts, clusters, and session history",
+      "template": "{file:commands/instinct-status.md}\n\n$ARGUMENTS"
+    },
+    "instinct-import": {
+      "description": "Import instincts from export file or another project",
+      "template": "{file:commands/instinct-import.md}\n\n$ARGUMENTS"
+    },
+    "instinct-export": {
+      "description": "Export project instincts to shareable JSON file",
+      "template": "{file:commands/instinct-export.md}\n\n$ARGUMENTS"
+    },
+    "evolve": {
+      "description": "Cluster similar instincts together for skill creation",
+      "template": "{file:commands/evolve.md}\n\n$ARGUMENTS"
+    },
+    "promote": {
+      "description": "Promote project instincts to global scope",
+      "template": "{file:commands/promote.md}\n\n$ARGUMENTS"
+    },
+    "projects": {
+      "description": "List all projects and their instinct statistics",
+      "template": "{file:commands/projects.md}\n\n$ARGUMENTS"
+    },
+    "skill-evolve": {
+      "description": "Create a new skill from instinct cluster",
+      "template": "{file:commands/skill-evolve.md}\n\n$ARGUMENTS"
+    },
+    "fallback": {
+      "description": "Trigger agent fallback and escalation for failed agent calls",
+      "template": "{file:commands/fallback.md}\n\n$ARGUMENTS"
+    }
+  },
+  "mcp": {
+    "playwright": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@playwright/mcp",
+        "--browser",
+        "chromium"
+      ],
+      "enabled": true
+    },
+    "context7": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@upstash/context7-mcp"
+      ],
+      "enabled": true
+    },
+    "github": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "enabled": false,
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      }
+    },
+    "sequential-thinking": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "enabled": true
+    },
+    "memory": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "enabled": true
+    },
+    "exa-web-search": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "exa-mcp-server"
+      ],
+      "enabled": false,
+      "env": {
+        "EXA_API_KEY": "${EXA_API_KEY}"
+      }
+    },
+    "filesystem": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "."
+      ],
+      "enabled": true
+    },
+    "jira": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "mcp-atlassian"
+      ],
+      "enabled": false,
+      "env": {
+        "JIRA_URL": "${JIRA_URL}",
+        "JIRA_EMAIL": "${JIRA_EMAIL}",
+        "JIRA_API_TOKEN": "${JIRA_API_TOKEN}"
+      }
+    },
+    "firecrawl": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "firecrawl-mcp"
+      ],
+      "enabled": false,
+      "env": {
+        "FIRECRAWL_API_KEY": "${FIRECRAWL_API_KEY}"
+      }
+    },
+    "supabase": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@supabase/mcp-server-supabase"
+      ],
+      "enabled": false
+    },
+    "magic": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@magicuidesign/mcp"
+      ],
+      "enabled": true
+    },
+    "browserbase": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@browserbasehq/mcp-server-browserbase"
+      ],
+      "enabled": false,
+      "env": {
+        "BROWSERBASE_API_KEY": "${BROWSERBASE_API_KEY}"
+      }
+    },
+    "token-optimizer": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "token-optimizer-mcp"
+      ],
+      "enabled": true
+    },
+    "codescene": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@codescene/codehealth-mcp"
+      ],
+      "enabled": false,
+      "env": {
+        "CS_ACCESS_TOKEN": "${CS_ACCESS_TOKEN}"
+      }
+    },
+    "confluence": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "confluence-mcp-server"
+      ],
+      "enabled": false,
+      "env": {
+        "CONFLUENCE_BASE_URL": "${CONFLUENCE_BASE_URL}",
+        "CONFLUENCE_EMAIL": "${CONFLUENCE_EMAIL}",
+        "CONFLUENCE_API_TOKEN": "${CONFLUENCE_API_TOKEN}"
+      }
+    },
+    "fal-ai": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "fal-ai-mcp-server"
+      ],
+      "enabled": false,
+      "env": {
+        "FAL_KEY": "${FAL_KEY}"
+      }
+    }
+  },
+  "permission": {
+    "mcp_*": "ask"
+  }
+}

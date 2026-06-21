@@ -1,0 +1,43 @@
+import * as fs from "fs"
+import * as path from "path"
+import * as os from "os"
+
+export interface AgentCallMetric {
+  agent_name: string
+  timestamp: string
+  duration_ms: number
+  token_usage: { input: number; output: number }
+  success: boolean
+  error_type: string | null
+  tool: string
+}
+
+const METRICS_DIR = path.join(os.homedir(), ".opencode", "metrics")
+const METRICS_FILE = path.join(METRICS_DIR, "agent-calls.jsonl")
+
+export function appendMetrics(entry: AgentCallMetric): void {
+  try {
+    fs.mkdirSync(METRICS_DIR, { recursive: true })
+    fs.appendFileSync(METRICS_FILE, JSON.stringify(entry) + "\n")
+  } catch { /* fail silently */ }
+}
+
+export function readMetrics(): AgentCallMetric[] {
+  try {
+    if (!fs.existsSync(METRICS_FILE)) return []
+    return fs.readFileSync(METRICS_FILE, "utf-8")
+      .split("\n")
+      .filter(line => line.trim())
+      .map(line => {
+        try { return JSON.parse(line) as AgentCallMetric }
+        catch { return null }
+      })
+      .filter((m): m is AgentCallMetric => m !== null)
+}
+
+export function writeMetrics(entries: AgentCallMetric[]): void {
+  try {
+    fs.mkdirSync(METRICS_DIR, { recursive: true })
+    fs.writeFileSync(METRICS_FILE, entries.map(e => JSON.stringify(e)).join("\n") + "\n")
+  } catch { /* fail silently */ }
+}
