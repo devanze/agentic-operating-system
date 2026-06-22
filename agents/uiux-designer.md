@@ -1,7 +1,7 @@
 ---
 description: Expert UI/UX designer for design systems, Figma conversion, usability, animations, WCAG accessibility, and production-ready web interface implementation. Powered by UI UX Pro Max knowledge base (67 styles, 161 palettes, 57 fonts, 99 UX rules, 17 stacks).
 mode: subagent
-model: sumopod/deepseek-v4-flash
+model: sumopod/deepseek-v4-pro
 temperature: 0.1
 ---
 

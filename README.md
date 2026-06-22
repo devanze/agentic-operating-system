@@ -174,7 +174,7 @@ The system employs a **dual-model routing** architecture that assigns the right 
 
 | Routing Tier | Model | Agents | Use Case | Avg Response |
 |-------------|-------|--------|----------|-------------|
-| Heavy (Thinking) | `deepseek-v4-pro` | Planner, Architect, Code-Architect, tdd-guide, Code-Reviewer, Security-Reviewer | Architecture design, complex planning, multi-step reasoning, code review, security audit | 2-8s |
+| Heavy (Thinking) | `deepseek-v4-pro` | Planner, Architect, Code-Architect, tdd-guide, Code-Reviewer, Security-Reviewer, uiux-designer | Architecture design, complex planning, multi-step reasoning, code review, security audit, UI/UX design | 2-8s |
 | Light (Fast) | `deepseek-v4-flash` | All execution agents, language reviewers, build resolvers, specialists | Code generation, formatting, exploration, linting, test execution | <2s |
 | Vision | `claude-sonnet-4-6` | ui-reviewer | Visual UI analysis with Playwright screenshots, accessibility snapshots | 3-5s |
 | Light Alternative | `gpt-5-nano` | Cost-sensitive execution | Budget-constrained environments | <1s |
@@ -568,11 +568,11 @@ The system includes **64 specialized agents** across 9 categories, routed by tas
 | **nextjs-reviewer** | Next.js |
 | **codeigniter-reviewer** | CodeIgniter 4 |
 
-### Role Specialists (v4-flash)
+### Role Specialists
 
 | Agent | Role | When | Model |
 |-------|------|------|-------|
-| **uiux-designer** | Design systems, usability, motion, Figma-to-code | UI/UX design phase | deepseek-v4-flash + ui-ux-pro-max skill |
+| **uiux-designer** | Design systems, usability, motion, Figma-to-code | UI/UX design phase | deepseek-v4-pro + ui-ux-pro-max skill |
 | **ui-reviewer** | Visual UI review with Playwright + vision AI | After UI changes, before merge | **claude-sonnet-4-6** (vision) |
 
 ### Specialist Agents (v4-flash)
@@ -918,14 +918,14 @@ The system supports **6 SumoPod models** with dual-model routing:
 
 | Model | Name | Tier | Primary Agents |
 |-------|------|------|---------------|
-| `deepseek-v4-pro` | DeepSeek V4 Pro | Heavy (thinking) | Planner, Architect, Code-Architect, tdd-guide, Code-Reviewer, Security-Reviewer |
+| `deepseek-v4-pro` | DeepSeek V4 Pro | Heavy (thinking) | Planner, Architect, Code-Architect, tdd-guide, Code-Reviewer, Security-Reviewer, uiux-designer |
 | `deepseek-v4-flash` | DeepSeek V4 Flash | Light (fast) | All execution agents, language reviewers, build resolvers, specialists |
 | `kimi-k2.6` | Kimi K2.6 | Alternative | Fallback reasoning |
 | `claude-sonnet-4-6` | Claude Sonnet 4.6 | Vision | ui-reviewer (Playwright screenshots + vision AI) |
 | `gpt-5-nano` | GPT 5 Nano | Light | Cost-sensitive execution |
 | `gpt-5-mini` | GPT 5 Mini | Light | Bulk processing |
 
-**Routing strategy:** Core agents (planner, architect, code-architect, tdd-guide, code-reviewer, security-reviewer) use **DeepSeek V4 Pro** for heavy reasoning. Execution agents and reviewers use **DeepSeek V4 Flash** for fast, cost-effective operation. The **ui-reviewer** uses **Claude Sonnet 4.6** specifically for its vision capabilities.
+**Routing strategy:** Core agents (planner, architect, code-architect, tdd-guide, code-reviewer, security-reviewer, uiux-designer) use **DeepSeek V4 Pro** for heavy reasoning and design work. Execution agents and reviewers use **DeepSeek V4 Flash** for fast, cost-effective operation. The **ui-reviewer** uses **Claude Sonnet 4.6** specifically for its vision capabilities.
 
 ---
 
