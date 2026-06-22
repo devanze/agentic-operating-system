@@ -1051,7 +1051,7 @@
       }
     },
     "ui-reviewer": {
-      "description": "UI visual review specialist using Playwright browser capture and GPT-5 Mini vision model. Captures screenshots at multiple viewports, analyzes visual output, and cross-references with source code for layout, accessibility, and responsiveness issues.",
+      "description": "UI visual review specialist using Playwright browser capture and Claude Sonnet 4.6 for real UI screenshot analysis, cross-referenced against source code. Generates detailed visual QA reports covering regressions, responsive breakpoints, accessibility, and design system compliance.",
       "mode": "subagent",
       "model": "sumopod/claude-sonnet-4-6",
       "temperature": 0.1,
