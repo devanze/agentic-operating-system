@@ -1,9 +1,9 @@
 # OpenCode Agent System
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/devanze/agentic-operating-system)
+[![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com/devanze/agentic-operating-system)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agents](https://img.shields.io/badge/agents-64-ff6b6b.svg)](#agent-ecosystem)
-[![Skills](https://img.shields.io/badge/skills-43-845ef7.svg)](#skill-packs)
+[![Skills](https://img.shields.io/badge/skills-44-845ef7.svg)](#skill-packs)
 [![Commands](https://img.shields.io/badge/commands-69-ffd43b.svg)](#commands)
 [![Tools](https://img.shields.io/badge/tools-8-20c997.svg)](#custom-tools)
 [![MCP Servers](https://img.shields.io/badge/MCP-16-339af0.svg)](#mcp-servers)
@@ -11,7 +11,7 @@
 [![TypeScript](https://img.shields.io/badge/typescript-6.x-3178c6.svg)](package.json)
 [![Vitest](https://img.shields.io/badge/vitest-4.x-6b9e3f.svg)](package.json)
 
-**Production-ready custom AI agent system for OpenCode** — 64 specialized agents, 43 skill packs, 69 slash commands, 8 custom tools, 16 MCP servers, and an instinct learning subsystem. The system supercharges OpenCode with a disciplined team of specialized AI agents that plan, build, review, secure, and maintain your code.
+**Production-ready custom AI agent system for OpenCode** — 64 specialized agents, 44 skill packs, 69 slash commands, 8 custom tools, 16 MCP servers, and an instinct learning subsystem. The system supercharges OpenCode with a disciplined team of specialized AI agents that plan, build, review, secure, and maintain your code.
 
 ---
 
@@ -311,7 +311,7 @@ Every agent type has a strict tool allowance. Using a tool not listed for your a
 | security-reviewer | `Read`, `Glob`, `Grep` ONLY |
 | planner, architect | `Read`, `Write`, `Bash`, `Task` (plan docs only) |
 | code-architect | `Read`, `Write`, `Task` (plan docs only) |
-| uiux-designer | `Read`, `Write`, `Edit`, `Glob`, `Grep`, `Task` |
+| uiux-designer | `Read`, `Write`, `Edit`, `Glob`, `Grep`, `Task`, `Skill` |
 | doc-updater | `Read`, `Write`, `Edit`, `Glob`, `Grep`, `filesystem_move_file` |
 | refactor-cleaner | `Bash`, `Write`, `Edit`, `Read`, `Glob`, `Grep` |
 | bash-specialist | `Bash`, `Read`, `Write` |
@@ -430,6 +430,7 @@ The system ships **43 skill packs** that provide specialized instructions and wo
 | **kubernetes-patterns** | Deployments, services, ConfigMaps, health checks |
 | **mcp-server-patterns** | MCP tool design, resource exposure, transports |
 | **design-system** | Design tokens, component architecture, theming |
+| **ui-ux-pro-max** | 67 styles, 161 palettes, 57 fonts, 99 UX rules, 17 stacks, design system generator |
 | **accessibility** | WCAG compliance, semantic HTML, ARIA, keyboard nav |
 | **hexagonal-architecture** | Ports & adapters, domain isolation, testing |
 
@@ -897,6 +898,27 @@ The system includes **12 lifecycle hooks** organized in **3 profiles**:
 | **Strict** | All of standard + post-edit-console-warn, post-edit-format, post-edit-typecheck, pre-bash-long-running, pre-write-doc-warn, config-protection, mcp-health-check | Maximum safety |
 
 Configure via `opencode.json` or apply with `/hookify`.
+
+---
+
+## Changelog
+
+### v1.1.0 (2026-06-22)
+
+**feat: Integrate UI UX Pro Max design intelligence skill**
+- Added `ui-ux-pro-max` skill — 67 UI styles, 161 color palettes, 57 font pairings, 99 UX guidelines, 25 chart types, 17 tech stack guidelines, 161 industry reasoning rules (~1.6 MB knowledge base)
+- Added BM25 search engine (`scripts/search.py`, `scripts/core.py`) with auto-domain detection across 11 domains
+- Added Design System Generator (`scripts/design_system.py`) — AI-reasoned design system output with ANSI true-color swatches and Markdown format
+- Added 12 CSV databases (styles, colors, typography, products, charts, landing, ux-guidelines, icons, fonts, reasoning, app-interface, react-performance)
+- Added 17 stack-specific UI guideline files (React, Next.js, Vue, Svelte, Astro, Nuxt, Angular, Laravel, Flutter, SwiftUI, shadcn/ui, Tailwind, React Native, Jetpack Compose, Three.js, JavaFX)
+
+**feat: Enhance uiux-designer agent with skill integration**
+- Updated `agents/uiux-designer.md` — integrated ui-ux-pro-max skill loading, Design Decision → Data Source mapping table, Design System Generator workflow, and Design Decisions documentation in DESIGN.md handoff
+- Added 12 new tool capability references to the agent prompt (CSV consultation, BM25 search, stack guidelines)
+
+**fix: Add Skill tool permission to uiux-designer**
+- Updated `AGENTS.md` Tool-to-Agent Permission Matrix — added `Skill` to uiux-designer allowed tools
+- Updated `README.md` Tool Permissions Matrix — same change for documentation parity
 
 ---
 

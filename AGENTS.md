@@ -40,7 +40,7 @@ Every agent type has a strict tool allowance. Using a tool not listed for your a
 | **planner** | `Read`, `Write`, `Bash`, `Task` (plan documents only — PLAN.md, PROGRESS.md) |
 | **architect** | `Read`, `Write`, `Bash`, `Task` (plan documents only — ARCHITECTURE.md, PROGRESS.md) |
 | **code-architect** | `Read`, `Write`, `Task` (plan documents only — BLUEPRINT.md, PROGRESS.md) |
-| **uiux-designer** | `Read`, `Write`, `Edit`, `Glob`, `Grep`, `Task` |
+| **uiux-designer** | `Read`, `Write`, `Edit`, `Glob`, `Grep`, `Task`, `Skill` |
 | **ui-reviewer** | `Read`, `Write`, `Glob`, `Grep` (Playwright MCP tools for browser capture) |
 | **doc-updater** | `Read`, `Write`, `Edit`, `Glob`, `Grep`, `filesystem_move_file` |
 | **refactor-cleaner** | `Bash`, `Write`, `Edit`, `Read`, `Glob`, `Grep` |
