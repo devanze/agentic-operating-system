@@ -1,7 +1,7 @@
 ---
 description: UI visual review specialist using Playwright browser capture and GPT-5 Nano vision model for real UI screenshot analysis, cross-referenced against source code.
 mode: subagent
-model: sumopod/gpt-5-mini
+model: sumopod/claude-sonnet-4-6
 temperature: 0.1
 permission:
   edit: deny

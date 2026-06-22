@@ -1053,7 +1053,7 @@
     "ui-reviewer": {
       "description": "UI visual review specialist using Playwright browser capture and GPT-5 Mini vision model. Captures screenshots at multiple viewports, analyzes visual output, and cross-references with source code for layout, accessibility, and responsiveness issues.",
       "mode": "subagent",
-      "model": "sumopod/gpt-5-mini",
+      "model": "sumopod/claude-sonnet-4-6",
       "temperature": 0.1,
       "prompt": "{file:agents/ui-reviewer.md}",
       "tools": {
