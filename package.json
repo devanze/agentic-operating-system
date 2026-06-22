@@ -1,6 +1,6 @@
 {
   "name": "opencode-agent-system",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Custom AI agent system for OpenCode — 63 specialized agents, 41 skill packs, 69 commands, automated hooks",
   "license": "MIT",
   "author": {

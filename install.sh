@@ -5,7 +5,7 @@ DEST="${1:-.}"
 
 echo ""
 echo "  ╔══════════════════════════════════════════════╗"
-echo "  ║   OpenCode Agent System — Installer v1.0.0  ║"
+echo "  ║   OpenCode Agent System — Installer v1.2.0  ║"
 echo "  ╚══════════════════════════════════════════════╝"
 echo ""
 echo "  Installing to: $DEST/.opencode/"
