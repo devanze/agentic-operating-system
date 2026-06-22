@@ -213,53 +213,112 @@ Agent triggered
 
 ### Prerequisites
 
+- **OpenCode** — Install first from [opencode.ai](https://opencode.ai) or `npm install -g @anomalyco/opencode`
 - **Node.js** >= 18.x
-- **OpenCode** installed and configured
-- **Git** (for version control integration)
+- **Git** for cloning and version control
+- **Python 3.x** (required for ui-ux-pro-max Design System Generator)
 
-### Quick Install
+### Option A: Global Installation (Recommended for Multi-Project)
+
+Install the agent system into your global OpenCode config so all projects benefit:
 
 ```bash
-# Clone the repository
+# 1. Clone the repository
 git clone https://github.com/devanze/agentic-operating-system.git
 cd agentic-operating-system
 
-# Install into your project's .opencode/ directory
+# 2. Copy to global OpenCode config
+cp AGENTS.md ~/.config/opencode/AGENTS.md
+cp -r agents ~/.config/opencode/agents
+cp -r skills ~/.config/opencode/skills
+cp -r commands ~/.config/opencode/commands
+cp -r plugins ~/.config/opencode/plugins
+cp -r tools ~/.config/opencode/tools
+cp -r rules ~/.config/opencode/rules
+cp -r scripts ~/.config/opencode/scripts
+cp opencode.json ~/.config/opencode/opencode.json
+
+# 3. Install dependencies
+cd ~/.config/opencode && npm install
+```
+
+> ⚠️ **IMPORTANT:** `AGENTS.md` MUST be placed in `~/.config/opencode/AGENTS.md` (global config). This file contains the orchestration rules, agent permission matrix, and workflow definitions that govern all agents. Without it in global config, per-project installations will not function correctly.
+
+### Option B: Per-Project Installation
+
+Install into a specific project's `.opencode/` directory:
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/devanze/agentic-operating-system.git
+cd agentic-operating-system
+
+# 2. Use the installer script
 ./install.sh /path/to/your/project
 ```
 
-The installer copies all agents, skills, commands, plugins, tools, rules, scripts, and configuration files into the project's `.opencode/` directory. Your project is immediately ready with all 64 agents, 44 skill packs, and full orchestration.
+The installer copies all agents, skills, commands, plugins, tools, rules, and scripts into `<project>/.opencode/`.
 
-### Manual Setup
+> ⚠️ **IMPORTANT:** For per-project installations, you STILL need `AGENTS.md` in your global config (`~/.config/opencode/AGENTS.md`). The orchestrator reads orchestration rules, the agent permission matrix, and workflow definitions from the global config. Copy it separately:
+> ```bash
+> cp AGENTS.md ~/.config/opencode/AGENTS.md
+> ```
+
+### Hybrid Setup (Recommended)
+
+Best of both worlds — global agent definitions + project-specific overrides:
 
 ```bash
-# Create the .opencode directory
-mkdir -p /path/to/your/project/.opencode
+# 1. Clone the repository
+git clone https://github.com/devanze/agentic-operating-system.git
+cd agentic-operating-system
 
-# Copy the agent system
-cp -r agents skills commands plugins tools rules scripts instructions \
-  opencode.json AGENTS.md /path/to/your/project/.opencode/
+# 2. Install AGENTS.md globally (REQUIRED for orchestration)
+cp AGENTS.md ~/.config/opencode/AGENTS.md
 
-# Install dependencies
-cd /path/to/your/project/.opencode
-npm install
+# 3. Install skills globally (shared across all projects)
+cp -r skills ~/.config/opencode/skills
+cp -r plugins ~/.config/opencode/plugins
+cp -r tools ~/.config/opencode/tools
+cp -r rules ~/.config/opencode/rules
+cp -r scripts ~/.config/opencode/scripts
+cp opencode.json ~/.config/opencode/opencode.json
+cd ~/.config/opencode && npm install
+
+# 4. For each project, run the installer (brings agents + commands)
+cd /path/to/agentic-operating-system
+./install.sh /path/to/your/project
 ```
 
 ### Verifying Installation
 
 ```bash
-# Run the health check -- validates all agent configs, skills, and tools
-node scripts/check/doctor.js
+# Check global config structure
+ls ~/.config/opencode/
+# Expected: AGENTS.md, agents/, skills/, commands/, opencode.json, plugins/, tools/, rules/, scripts/
 
-# Validate agent configurations
-node scripts/validate/agents.js
+# Run health check
+cd ~/.config/opencode && node scripts/check/doctor.js 2>/dev/null || echo "Health check script available after npm install"
 
-# Validate skill packs
-node scripts/validate/skills.js
+# Validate configurations
+node scripts/validate/agents.js 2>/dev/null
+node scripts/validate/skills.js 2>/dev/null
 
-# Check MCP server connectivity
-node scripts/check/mcp-health.js
+# Check that AGENTS.md is in global config
+test -f ~/.config/opencode/AGENTS.md && echo "✅ AGENTS.md in global config" || echo "❌ AGENTS.md MISSING from global config!"
 ```
+
+### Configuration Overview
+
+| File | Location | Purpose |
+|------|----------|---------|
+| `AGENTS.md` | `~/.config/opencode/` (global) | **REQUIRED** — Orchestration rules, agent permissions, workflow definitions, skill catalog |
+| `opencode.json` | `~/.config/opencode/` or project `.opencode/` | Provider config, model routing, command-command-agent mappings |
+| `agents/*.md` | `.opencode/agents/` (per-project or global) | Agent definitions with YAML frontmatter |
+| `skills/*/SKILL.md` | `.opencode/skills/` | Skill packs loaded on demand by agents |
+| `commands/*.md` | `.opencode/commands/` | Slash command definitions |
+| `plugins/` | `.opencode/plugins/` | Lifecycle hooks and plugin engine |
+| `tools/` | `.opencode/tools/` | Custom tool implementations |
 
 ---
 
