@@ -1328,6 +1328,12 @@
       "agent": "codeigniter-reviewer",
       "subtask": true
     },
+    "ui-reviewer": {
+      "description": "Visual UI review with Playwright browser screenshots and Claude Sonnet 4.6 vision analysis",
+      "template": "{file:commands/ui-reviewer.md}\n\n$ARGUMENTS",
+      "agent": "ui-reviewer",
+      "subtask": true
+    },
     "ux": {
       "description": "UI/UX design specialist (visuals, interaction, accessibility)",
       "template": "{file:commands/ux.md}\n\n$ARGUMENTS",
