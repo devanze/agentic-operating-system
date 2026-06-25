@@ -39,3 +39,4 @@ temp/
 # SQLite databases
 *.db
 *.sqlite
+AGENTS.md.bak
